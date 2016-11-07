@@ -140,6 +140,7 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
     li = xbmcgui.ListItem(name, path=url, iconImage='DefaultVideo.png', thumbnailImage=logo)
     li.setInfo(type='Video', infoLabels=infoLabels)
     li.setProperty('IsPlayable', 'true')
+    li.addStreamInfo('video', {'codec': 'h264','aspect': 1.78,'width': 1280,'height': 720,'duration': 55})
     items = [(xbmc.getLocalizedString(13347), 'Action(Queue)')]
     for mi in menuItems.keys():
         action = menuItems[mi]
