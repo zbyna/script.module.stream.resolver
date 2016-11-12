@@ -1,3 +1,19 @@
+[B]1.6.435:[/B]
+- added support for new listitem art handling in Jarvis,
+  fix WARNING: XFILE::CFileFactory::CreateLoader -,
+  fix download files with subtitles (zbyna)
+[B]1.6.43:[/B]
+- make headers parameter in load_subtitles optional,
+  sent custom headers also when subs setting is missing (mx3L)
+[B]1.6.42:[/B]
+- sent custom headers also to download subtitles,
+  streamujtv: fix downloading subtitles (mx3L)
+[B]1.6.41:[/B]
+- correctly pass *all* http headers to DVD player(Libor Zoubek)
+- Fix openload, add myvi.ru resolver, 
+  support for mojevideo.sk (jose1711)
+- xbmcutil: Reformat the code, add "Queue item" context menu action, 
+  fix invalid syntax in lib/server/myviruresolver.py (Lubo)
 [B]1.6.40:[/B]
 - add on_init hook to ContentProvider
 - fix hqq & nahnoji parsers, added sk translations (jose1711)
