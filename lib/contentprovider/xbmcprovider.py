@@ -162,7 +162,7 @@ class XBMContentProvider(object):
                 name+='.mp4'
             xbmcutil.download(self.addon,name,self.provider._url(stream['url']),os.path.join(downloads,name),headers=stream['headers'])
 
-    def play(self,item):
+    def play(self,item, sosac=None):
         #xbmcplugin.setResolvedUrl(int(0), True, xbmcgui.ListItem(path='/dev/null'))
         stream = self.resolve(item['url'])
         if stream:
@@ -188,9 +188,11 @@ class XBMContentProvider(object):
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
             if 'subs' in self.settings.keys():
                 if self.settings['subs'] == True:
-                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'))
-            else: # optional setting - plugin may not supply it
-                xbmcutil.load_subtitles(stream['subs'], stream.get('headers'))
+                    xbmcutil.load_subtitles(stream['subs'], stream['headers'], sosac)
+            else:  # optional setting - plugin may not supply it
+                xbmcutil.load_subtitles(stream['subs'], stream['headers'], sosac)
+            if sosac is not None:
+                return sosac
 
     def _handle_exc(self,e):
         msg = e.message
