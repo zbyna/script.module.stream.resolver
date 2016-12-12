@@ -198,7 +198,7 @@ def save_to_file(url, file, headers=None):
         traceback.print_exc()
 
 
-def load_subtitles(url, headers=None):
+def load_subtitles(url, headers=None, sosac=None):
     if not (url == '' or url == None):
         local = xbmc.translatePath(__addon__.getAddonInfo('path')).decode('utf-8')
         c_local = compat_path(local)
@@ -206,6 +206,9 @@ def load_subtitles(url, headers=None):
             os.makedirs(c_local)
         local = os.path.join(local, 'xbmc_subs' + str(int(time.time())) + '.srt')
         if not save_to_file(url, local, headers):
+            return
+        if sosac is not None:
+            sosac.append(local.encode('utf-8'))
             return
         player = xbmc.Player()
         count = 0
