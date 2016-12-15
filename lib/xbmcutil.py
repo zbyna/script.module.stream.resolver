@@ -33,6 +33,7 @@ import xbmcgui
 import xbmcplugin
 import xbmc
 import xbmcaddon
+import xbmcvfs
 from htmlentitydefs import name2codepoint as n2cp
 import simplejson as json
 import util
@@ -140,7 +141,8 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
     li = xbmcgui.ListItem(name, path=url, iconImage='DefaultVideo.png', thumbnailImage=logo)
     li.setInfo(type='Video', infoLabels=infoLabels)
     li.setProperty('IsPlayable', 'true')
-    li.addStreamInfo('video', {'codec': 'h264','aspect': 1.78,'width': 1280,'height': 720,'duration': 55})
+    li.addStreamInfo(
+        'video', {'codec': 'h264', 'aspect': 1.78, 'width': 1280, 'height': 720, 'duration': 55})
     items = [(xbmc.getLocalizedString(13347), 'Action(Queue)')]
     for mi in menuItems.keys():
         action = menuItems[mi]
@@ -466,7 +468,15 @@ class Downloader(object):
         for header in headers:
             opener.addheader(header, headers[header])
         try:
-            opener.retrieve(remote, local, reporthook=self.dlProgress)
+            if local.startswith('smb://'):
+                localTemp = xbmc.translatePath('special://temp') + 'videoSosac'
+                opener.retrieve(remote, localTemp, reporthook=self.dlProgress)
+                xbmc.log('"localTemp:" ' + str(localTemp))
+                xbmc.log('"SAMBA: " ' + local)
+                xbmcvfs.copy(localTemp, local)
+                xbmcvfs.delete(localTemp)
+            else:
+                opener.retrieve(remote, local, reporthook=self.dlProgress)
             if hasattr(opener, 'error_msg'):
                 return opener.error_msg
             return True
