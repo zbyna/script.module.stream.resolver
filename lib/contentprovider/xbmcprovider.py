@@ -28,6 +28,7 @@ import resolver
 import time
 import xbmcplugin
 import xbmc
+import xbmcvfs
 import xbmcgui
 import urlparse
 import urllib
@@ -169,7 +170,17 @@ class XBMContentProvider(object):
             # clean up \ and /
             name = item['title'].replace('/', '_').replace('\\', '_')
             if not stream['subs'] == '':
-                xbmcutil.save_to_file(stream['subs'],os.path.join(downloads,name+'.srt'), stream['headers'])
+                if downloads.startswith('smb://'):
+                    localTemp = xbmc.translatePath('special://temp') + name + '.srt'
+                    local = downloads + name + '.srt'
+                    xbmcutil.save_to_file(stream['subs'], localTemp, stream['headers'])
+                    xbmc.log('"localTemp subtitles:" ' + str(localTemp))
+                    xbmc.log('"SAMBA subtitles: " ' + local)
+                    xbmcvfs.copy(localTemp, local)
+                    xbmcvfs.delete(localTemp)
+                else:
+                    xbmcutil.save_to_file(
+                        stream['subs'], os.path.join(downloads, name + '.srt'), stream['headers'])
             dot = name.find('.')
             if dot <= 0:
                 # name does not contain extension, append some
