@@ -214,9 +214,9 @@ class XBMContentProvider(object):
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
             if 'subs' in self.settings.keys():
                 if self.settings['subs'] == True:
-                    xbmcutil.load_subtitles(stream['subs'], stream['headers'], sosac)
+                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
             else:  # optional setting - plugin may not supply it
-                xbmcutil.load_subtitles(stream['subs'], stream['headers'], sosac)
+                xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
             if sosac is not None:
                 return sosac
 
