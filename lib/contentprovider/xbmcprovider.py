@@ -211,14 +211,17 @@ class XBMContentProvider(object):
                     # tv serie
                     li.setArt({'thumb': item['info']['art']['thumb']})
             # new art handling from Jarvis - end
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
-            if 'subs' in self.settings.keys():
-                if self.settings['subs'] == True:
-                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
-            else:  # optional setting - plugin may not supply it
-                xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
             if sosac is not None:
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
+                if 'subs' in self.settings.keys():
+                    if self.settings['subs'] == True:
+                        xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
+                else:  # optional setting - plugin may not supply it
+                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
                 return sosac
+            else:
+                xbmcutil.set_subtitles(li, stream['subs'], stream.get('headers'))
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
 
     def _handle_exc(self, e):
         msg = e.message
