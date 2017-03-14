@@ -1,3 +1,7 @@
+[B]1.6.448:[/B]
+- Fix subtitles for playing outside media library in Krypton (zbyna)
+[B]1.6.447:[/B]
+- Fix my reintroduced bug with stream.get() (zbyna)
 [B]1.6.446:[/B]
 - Add possibility for downloading to SMB shares (zbyna)
 - Fix subtitles handling for sosac when playing from
