@@ -142,7 +142,7 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
     li.setInfo(type='Video', infoLabels=infoLabels)
     li.setProperty('IsPlayable', 'true')
     li.addStreamInfo(
-        'video', {'codec': 'h264', 'aspect': 1.78, 'width': 1280, 'height': 720, 'duration': 55})
+        'video', {'codec': 'h264', 'aspect': 0, 'width': 0, 'height': 0, 'duration': 0})
     items = [(xbmc.getLocalizedString(13347), 'Action(Queue)')]
     for mi in menuItems.keys():
         action = menuItems[mi]
@@ -199,6 +199,7 @@ def save_to_file(url, file, headers=None):
     except:
         traceback.print_exc()
 
+
 def set_subtitles(listItem, url, headers=None):
     if not (url == '' or url == None):
         util.info('Downloading subtitles')
@@ -209,10 +210,11 @@ def set_subtitles(listItem, url, headers=None):
         local = os.path.join(local, 'xbmc_subs' + str(int(time.time())) + '.srt')
         util.info('Saving subtitles as %s' % local)
         if not save_to_file(url, local, headers):
-             util.error('Failed to store subtitles!')
-             return
+            util.error('Failed to store subtitles!')
+            return
         util.info('Setting subtitles to playable item')
         listItem.setSubtitles([local.encode('utf-8')])
+
 
 def load_subtitles(url, headers=None, sosac=None):
     if not (url == '' or url == None):
