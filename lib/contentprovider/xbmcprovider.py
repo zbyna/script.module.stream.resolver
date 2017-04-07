@@ -56,7 +56,8 @@ class XBMContentProvider(object):
             provider.lang = None
             pass
         self.settings = settings
-        util.info('Initializing provider %s with settings %s' % (provider.name, settings))
+        util.info('Initializing provider %s with settings %s' % (provider.name,
+                                                                 settings))
         self.addon = addon
         self.addon_id = addon.getAddonInfo('id')
         if '!download' not in self.provider.capabilities():
@@ -67,7 +68,8 @@ class XBMContentProvider(object):
     def check_setting_keys(self, keys):
         for key in keys:
             if not key in self.settings.keys():
-                raise Exception('Invalid settings passed - [' + key + '] setting is required')
+                raise Exception(
+                    'Invalid settings passed - [' + key + '] setting is required')
 
     def params(self):
         return {'cp': self.provider.name}
@@ -104,7 +106,8 @@ class XBMContentProvider(object):
             menu1['search-remove'] = what
             menu2['search-edit'] = what
             xbmcutil.add_dir(
-                what, params, menuItems={xbmcutil.__lang__(30016): menu2, xbmc.getLocalizedString(117): menu1})
+                what, params, menuItems={xbmcutil.__lang__(30016): menu2,
+                                         xbmc.getLocalizedString(117): menu1})
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def search_remove(self, what):
@@ -150,10 +153,12 @@ class XBMContentProvider(object):
         if 'search' in self.provider.capabilities():
             params = self.params()
             params.update({'search-list': '#'})
-            xbmcutil.add_dir(xbmcutil.__lang__(30003), params, xbmcutil.icon('search.png'))
+            xbmcutil.add_dir(xbmcutil.__lang__(30003), params,
+                             xbmcutil.icon('search.png'))
         if not '!download' in self.provider.capabilities():
             xbmcutil.add_local_dir(
-                xbmcutil.__lang__(30006), self.settings['downloads'], xbmcutil.icon('download.png'))
+                xbmcutil.__lang__(30006), self.settings['downloads'],
+                xbmcutil.icon('download.png'))
         self.list(self.provider.categories())
         return xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -180,13 +185,15 @@ class XBMContentProvider(object):
                     xbmcvfs.delete(localTemp)
                 else:
                     xbmcutil.save_to_file(
-                        stream['subs'], os.path.join(downloads, name + '.srt'), stream['headers'])
+                        stream['subs'], os.path.join(downloads, name + '.srt'),
+                        stream['headers'])
             dot = name.find('.')
             if dot <= 0:
                 # name does not contain extension, append some
                 name += '.mp4'
-            xbmcutil.download(self.addon, name, self.provider._url(
-                stream['url']), os.path.join(downloads, name), headers=stream['headers'])
+            xbmcutil.download(self.addon, name, self.provider._url(stream['url']),
+                              os.path.join(downloads, name),
+                              headers=stream['headers'])
 
     def play(self, item, sosac=None):
         #xbmcplugin.setResolvedUrl(int(0), True, xbmcgui.ListItem(path='/dev/null'))
@@ -215,9 +222,11 @@ class XBMContentProvider(object):
                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
                 if 'subs' in self.settings.keys():
                     if self.settings['subs'] == True:
-                        xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
+                        xbmcutil.load_subtitles(stream['subs'], stream.get('headers'),
+                                                sosac)
                 else:  # optional setting - plugin may not supply it
-                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'), sosac)
+                    xbmcutil.load_subtitles(stream['subs'], stream.get('headers'),
+                                            sosac)
                 return sosac
             else:
                 xbmcutil.set_subtitles(li, stream['subs'], stream.get('headers'))
@@ -254,16 +263,20 @@ class XBMContentProvider(object):
                 self.render_dir(item)
             elif item['type'] == 'next':
                 params.update({'list': item['url']})
-                xbmcutil.add_dir(xbmcutil.__lang__(30007), params, xbmcutil.icon('next.png'))
+                xbmcutil.add_dir(xbmcutil.__lang__(30007), params,
+                                 xbmcutil.icon('next.png'))
             elif item['type'] == 'prev':
                 params.update({'list': item['url']})
-                xbmcutil.add_dir(xbmcutil.__lang__(30008), params, xbmcutil.icon('prev.png'))
+                xbmcutil.add_dir(xbmcutil.__lang__(30008), params,
+                                 xbmcutil.icon('prev.png'))
             elif item['type'] == 'new':
                 params.update({'list': item['url']})
-                xbmcutil.add_dir(xbmcutil.__lang__(30012), params, xbmcutil.icon('new.png'))
+                xbmcutil.add_dir(xbmcutil.__lang__(30012), params,
+                                 xbmcutil.icon('new.png'))
             elif item['type'] == 'top':
                 params.update({'list': item['url']})
-                xbmcutil.add_dir(xbmcutil.__lang__(30013), params, xbmcutil.icon('top.png'))
+                xbmcutil.add_dir(xbmcutil.__lang__(30013), params,
+                                 xbmcutil.icon('top.png'))
             elif item['type'] == 'video':
                 self.render_video(item)
             else:
@@ -294,11 +307,13 @@ class XBMContentProvider(object):
                         pass
                 menuItems[ctxtitle] = value
         xbmcutil.add_dir(
-            title, params, img, infoLabels=self._extract_infolabels(item), menuItems=menuItems)
+            title, params, img, infoLabels=self._extract_infolabels(item),
+            menuItems=menuItems)
 
     def _extract_infolabels(self, item):
         infoLabels = {}
-        for label in ['title', 'plot', 'year', 'genre', 'rating', 'director', 'votes', 'cast', 'trailer', 'tvshowtitle', 'season', 'episode']:
+        for label in ['title', 'plot', 'year', 'genre', 'rating', 'director', 'votes',
+                      'cast', 'trailer', 'tvshowtitle', 'season', 'episode']:
             if label in item.keys():
                 infoLabels[label] = util.decode_html(item[label])
         return infoLabels
@@ -384,10 +399,12 @@ class XBMCLoginOptionalContentProvider(XBMContentProvider):
 
     def ask_for_captcha(self, params):
         img = os.path.join(
-            unicode(xbmc.translatePath(self.addon.getAddonInfo('profile'))), 'captcha.png')
+            unicode(xbmc.translatePath(
+                self.addon.getAddonInfo('profile'))), 'captcha.png')
         util.save_to_file(params['img'], img)
         cd = CaptchaDialog(
-            'captcha-dialog.xml', xbmcutil.__addon__.getAddonInfo('path'), 'default', '0')
+            'captcha-dialog.xml', xbmcutil.__addon__.getAddonInfo('path'),
+            'default', '0')
         cd.image = img
         xbmc.sleep(3000)
         cd.doModal()
@@ -448,7 +465,8 @@ class XBMCLoginOptionalDelayedContentProvider(XBMCLoginOptionalContentProvider):
                 xbmcgui.Dialog().ok(self.provider.name, xbmcutil.__lang__(30011))
                 return
         try:
-            return self.provider.resolve(item, captcha_cb=self.ask_for_captcha, wait_cb=self.wait_cb)
+            return self.provider.resolve(
+                item, captcha_cb=self.ask_for_captcha, wait_cb=self.wait_cb)
         except ResolveException, e:
             self._handle_exc(e)
 

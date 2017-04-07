@@ -138,11 +138,13 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
     if not 'Title' in infoLabels:
         infoLabels['Title'] = name
     url = _create_plugin_url(params)
-    li = xbmcgui.ListItem(name, path=url, iconImage='DefaultVideo.png', thumbnailImage=logo)
+    li = xbmcgui.ListItem(name, path=url, iconImage='DefaultVideo.png',
+                          thumbnailImage=logo)
     li.setInfo(type='Video', infoLabels=infoLabels)
     li.setProperty('IsPlayable', 'true')
     li.addStreamInfo(
-        'video', {'codec': 'h264', 'aspect': 0, 'width': 0, 'height': 0, 'duration': 0})
+        'video', {'codec': 'h264', 'aspect': 0, 'width': 0,
+                  'height': 0, 'duration': 0})
     items = [(xbmc.getLocalizedString(13347), 'Action(Queue)')]
     for mi in menuItems.keys():
         action = menuItems[mi]
@@ -153,7 +155,8 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
                 action_type = action['action-type']
                 del action['action-type']
                 if action_type == 'list':
-                    items.append((mi, 'Container.Update(%s)' % _create_plugin_url(action)))
+                    items.append((mi,
+                                  'Container.Update(%s)' % _create_plugin_url(action)))
                 elif action_type == 'play':
                     items.append((mi, 'PlayMedia(%s)' % _create_plugin_url(action)))
                 else:
