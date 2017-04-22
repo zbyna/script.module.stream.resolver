@@ -38,6 +38,10 @@ from htmlentitydefs import name2codepoint as n2cp
 import simplejson as json
 import util
 UA = 'Mozilla/6.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.5) Gecko/2008092417 Firefox/3.0.3'
+videoStreamInfo = {'hd': {'codec': 'h264', 'aspect': 1.78,
+                          'width': 1280, 'height': 720, 'duration': 0},
+                   'sd': {'codec': 'h264', 'aspect': 1.78,
+                          'width': 768, 'height': 576, 'duration': 0}}
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'usage'))
 import utmain
@@ -133,7 +137,7 @@ def add_local_dir(name, url, logo='', infoLabels={}, menuItems={}):
                                        isFolder=True)
 
 
-def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
+def add_video(name, params={}, logo='', infoLabels={}, menuItems={}, streamInfo=None):
     name = decode_html(name)
     if not 'Title' in infoLabels:
         infoLabels['Title'] = name
@@ -142,9 +146,20 @@ def add_video(name, params={}, logo='', infoLabels={}, menuItems={}):
                           thumbnailImage=logo)
     li.setInfo(type='Video', infoLabels=infoLabels)
     li.setProperty('IsPlayable', 'true')
-    li.addStreamInfo(
-        'video', {'codec': 'h264', 'aspect': 0, 'width': 0,
-                  'height': 0, 'duration': 0})
+    if streamInfo:
+        if streamInfo['quality']:
+            li.addStreamInfo('video',
+                             videoStreamInfo['hd' if streamInfo['quality'] == 'hd' else 'sd'])
+        li.addStreamInfo('subtitle', {'language': (' / '.join(streamInfo['subtitles'])
+                                                   if streamInfo['subtitles'] else '')})
+        li.addStreamInfo('audio', {'codec': 'aac',
+                                   'language': (' / '.join(streamInfo['dubbing'])
+                                                if streamInfo['dubbing'] else ''),
+                                   'channels': 2})
+    else:
+        li.addStreamInfo(
+            'video', {'codec': 'h264', 'aspect': 0, 'width': 0,
+                      'height': 0, 'duration': 0})
     items = [(xbmc.getLocalizedString(13347), 'Action(Queue)')]
     for mi in menuItems.keys():
         action = menuItems[mi]

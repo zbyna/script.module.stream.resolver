@@ -318,6 +318,9 @@ class XBMContentProvider(object):
                 infoLabels[label] = util.decode_html(item[label])
         return infoLabels
 
+    def _extract_streaminfo(self, item):
+        return {x: item.get(x, None) for x in ['quality', 'dubbing', 'subtitles']}
+
     def render_video(self, item):
         params = self.params()
         params.update({'play': item['url']})
@@ -344,7 +347,8 @@ class XBMContentProvider(object):
                            params,
                            item['img'],
                            infoLabels=self._extract_infolabels(item),
-                           menuItems=menuItems
+                           menuItems=menuItems,
+                           streamInfo=self._extract_streaminfo(item)
                            )
 
     def categories(self):
