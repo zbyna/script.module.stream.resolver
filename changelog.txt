@@ -1,3 +1,6 @@
+[B]2.0.0:[/B]
+- Add possibility for adding video,audio and subtitle stream info (zbyna)
+- Fix video item duration bug in list item (zbyna)
 [B]1.6.448:[/B]
 - Fix subtitles for playing outside media library in Krypton (zbyna)
 [B]1.6.447:[/B]
